@@ -1,98 +1,157 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useMemo, useState } from 'react';
+import { FlatList, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback } from 'react';
+import Toast from 'react-native-toast-message';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { RecipeCard } from '@/components/recipe-cards';
+import { ThemedText as Text } from '@/components/themed-text';
+import { categories, recipes } from '@/data/recipes';
+
+const FAVORITES_KEY = '@gastroalquimia_favorites';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const router = useRouter();
+  const [search, setSearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [favorites, setFavorites] = useState<string[]>([]);
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  const loadFavorites = useCallback(async () => {
+    const stored = await AsyncStorage.getItem(FAVORITES_KEY);
+    setFavorites(stored ? JSON.parse(stored) : []);
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadFavorites();
+    }, [loadFavorites])
+  );
+
+  const toggleFavorite = async (id: string, name: string) => {
+    const isFav = favorites.includes(id);
+    const updated = isFav ? favorites.filter((f) => f !== id) : [...favorites, id];
+    setFavorites(updated);
+    await AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(updated));
+
+    Toast.show({
+      type: 'success',
+      text1: isFav ? 'Removido dos favoritos' : 'Adicionado aos favoritos',
+      text2: name,
+      visibilityTime: 1500,
+    });
+  };
+
+  const filteredRecipes = useMemo(() => {
+    return recipes.filter((r) => {
+      const matchesSearch = r.name.toLowerCase().includes(search.toLowerCase());
+      const matchesCategory = selectedCategory === 'Todos' || r.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [search, selectedCategory]);
+
+  return (
+    <View style={styles.container}>
+      <Text type="title" style={styles.title}>GastroAlquimia</Text>
+
+      <View style={styles.searchBar}>
+        <Ionicons name="search" size={18} color="#888" />
+        <TextInput
+          placeholder="Buscar receitas..."
+          value={search}
+          onChangeText={setSearch}
+          style={styles.searchInput}
+          placeholderTextColor="#999"
+        />
+      </View>
+
+      <FlatList
+        data={categories}
+        horizontal
+        keyExtractor={(item) => item}
+        showsHorizontalScrollIndicator={false}
+        style={styles.categoryList}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={[styles.categoryChip, selectedCategory === item && styles.categoryChipActive]}
+            onPress={() => setSelectedCategory(item)}
+          >
+            <Text style={[styles.categoryText, selectedCategory === item && styles.categoryTextActive]}>
+              {item}
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
+
+      <FlatList
+        data={filteredRecipes}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        columnWrapperStyle={styles.row}
+        contentContainerStyle={styles.list}
+        renderItem={({ item }) => (
+          <RecipeCard
+            recipe={item}
+            isFavorite={favorites.includes(item.id)}
+            onPress={() => router.push(`/recipe/${item.id}`)}
+            onToggleFavorite={() => toggleFavorite(item.id, item.name)}
+          />
+        )}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    paddingTop: 60,
+    paddingHorizontal: 16,
+  },
+  title: {
+    marginBottom: 16,
+  },
+  searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginBottom: 12,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  searchInput: {
+    marginLeft: 8,
+    flex: 1,
+    fontSize: 15,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  categoryList: {
+    marginBottom: 12,
+    flexGrow: 0,
+  },
+  categoryChip: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 20,
+    marginRight: 8,
+  },
+  categoryChipActive: {
+    backgroundColor: '#e63946',
+  },
+  categoryText: {
+    fontSize: 13,
+    color: '#333',
+  },
+  categoryTextActive: {
+    color: '#fff',
+    fontWeight: '600',
+  },
+  row: {
+    justifyContent: 'space-between',
+  },
+  list: {
+    paddingBottom: 20,
   },
 });
