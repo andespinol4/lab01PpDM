@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState,useCallback } from 'react';
 import { FlatList, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { useCallback } from 'react';
+// eslint-disable-next-line import/no-duplicates
 import Toast from 'react-native-toast-message';
 
 import { RecipeCard } from '@/components/recipe-cards';
