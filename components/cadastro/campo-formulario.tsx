@@ -21,18 +21,22 @@ export function CampoFormulario({ label, ...rest }: CampoFormularioProps) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginBottom: 14,
+    marginBottom: 16,
   },
   label: {
     fontSize: 13,
     fontWeight: '600',
     marginBottom: 6,
+    color: '#333',
   },
   input: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fafafa',
+    borderWidth: 1,
+    borderColor: '#ddd',
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
+    color: '#111',
   },
 });

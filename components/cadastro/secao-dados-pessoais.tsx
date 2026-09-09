@@ -1,3 +1,4 @@
+import { sharedStyles } from '@/constants/cadastro-styles';
 import { StyleSheet, View } from 'react-native';
 
 import { CampoFormulario } from '@/components/cadastro/campo-formulario';
@@ -30,7 +31,7 @@ export function SecaoDadosPessoais({
 }: SecaoDadosPessoaisProps) {
   return (
     <View style={styles.wrapper}>
-      <Text type="subtitle" style={styles.sectionTitle}>Dados pessoais</Text>
+    <Text type="subtitle" style={sharedStyles.sectionTitle}>Dados pessoais</Text>
 
       <CampoFormulario
         label="Nome completo"
@@ -81,5 +82,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     marginBottom: 12,
+    color: '#e63946',
   },
 });
