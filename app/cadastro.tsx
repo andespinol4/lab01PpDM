@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { SecaoDadosAcesso } from '@/components/cadastro/secao-dados-acesso';
 import { SecaoDadosPessoais } from '@/components/cadastro/secao-dados-pessoais';
@@ -24,7 +24,7 @@ export default function CadastroScreen() {
     router.push('/');
   };
 
-    return (
+  return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#333" />
@@ -59,7 +59,7 @@ export default function CadastroScreen() {
         />
       </View>
 
-    <View style={styles.actionsArea}>
+      <View style={styles.actionsArea}>
         <TouchableOpacity style={styles.cancelButton} onPress={() => router.back()}>
           <Text style={styles.cancelButtonText}>Cancelar</Text>
         </TouchableOpacity>
@@ -72,9 +72,20 @@ export default function CadastroScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
+  container: {
     flex: 1,
     backgroundColor: '#000000',
+  },
+  content: {
+    paddingHorizontal: 24,
+    paddingTop: 60,
+    paddingBottom: 40,
+    maxWidth: 480,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  backButton: {
+    marginBottom: 20,
   },
   title: {
     marginBottom: 6,
@@ -85,18 +96,6 @@ const styles = StyleSheet.create({
     color: '#888',
     marginBottom: 24,
   },
- content: {
-  paddingHorizontal: 24,
-  paddingTop: 60,
-  paddingBottom: 40,
-  maxWidth: 480,
-  width: '100%',
-  alignSelf: 'center',
-},
-  backButton: {
-    marginBottom: 20,
-  },
-  
   sectionBlock: {
     marginBottom: 8,
   },
@@ -133,7 +132,6 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
-    marginTop: 16,
   },
   cadastroButtonText: {
     color: '#fff',
