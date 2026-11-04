@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 16,
+    color: '#ffffff',
   },
   emptyWrapper: {
     flex: 1,
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 14,
-    color: '#888',
+    color: '#ffffff',
     textAlign: 'center',
   },
   row: {

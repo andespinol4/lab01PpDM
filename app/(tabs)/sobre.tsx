@@ -73,14 +73,15 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 8,
-  },
+    color: '#ffffff', },
   description: {
     fontSize: 14,
-    color: '#888',
+    color: '#ffffff',
     marginBottom: 24,
   },
   sectionTitle: {
     marginBottom: 16,
+    color: '#ffffff',
   },
   card: {
     flexDirection: 'row',
@@ -105,12 +106,12 @@ const styles = StyleSheet.create({
   techName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#222',
+    color: '#000000',
     marginBottom: 4,
   },
   techDescription: {
     fontSize: 13,
-    color: '#555',
+    color: '#000000',
     lineHeight: 18,
   },
 });

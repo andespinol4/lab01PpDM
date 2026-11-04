@@ -1,9 +1,8 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Image } from 'expo-image';
-import { Ionicons } from '@expo/vector-icons';
 import { ThemedText as Text } from '@/components/themed-text';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { Recipe } from '@/data/recipes';
+import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 type RecipeCardProps = {
   recipe: Recipe;
@@ -13,37 +12,22 @@ type RecipeCardProps = {
 };
 
 export function RecipeCard({ recipe, isFavorite, onPress, onToggleFavorite }: RecipeCardProps) {
-  const scale = useSharedValue(1);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  const handleFavoritePress = () => {
-    scale.value = withSpring(1.3, {}, () => {
-      scale.value = withSpring(1);
-    });
-    onToggleFavorite();
-  };
-
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
       <Image source={{ uri: recipe.image }} style={styles.image} contentFit="cover" transition={300} />
-      <Animated.View style={[styles.favoriteButton, animatedStyle]}>
-        <TouchableOpacity onPress={handleFavoritePress}>
-          <Ionicons
-            name={isFavorite ? 'heart' : 'heart-outline'}
-            size={22}
-            color={isFavorite ? '#e63946' : '#fff'}
-          />
-        </TouchableOpacity>
-      </Animated.View>
+      <TouchableOpacity style={styles.favoriteButton} onPress={onToggleFavorite} activeOpacity={0.9}>
+        <Ionicons
+          name={isFavorite ? 'heart' : 'heart-outline'}
+          size={22}
+          color={isFavorite ? '#e63946' : '#fff'}
+        />
+      </TouchableOpacity>
       <View style={styles.info}>
         <Text style={styles.name} numberOfLines={1}>{recipe.name}</Text>
         <View style={styles.metaRow}>
-          <Ionicons name="time-outline" size={14} color="#888" />
+          <Ionicons name="time-outline" size={14} color="#666" />
           <Text style={styles.metaText}>{recipe.prepTime}</Text>
-          <Ionicons name="people-outline" size={14} color="#888" style={{ marginLeft: 10 }} />
+          <Ionicons name="people-outline" size={14} color="#666" style={{ marginLeft: 10 }} />
           <Text style={styles.metaText}>{recipe.servings} porções</Text>
         </View>
       </View>
@@ -81,8 +65,9 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '700',
     marginBottom: 4,
+    color: '#111111',
   },
   metaRow: {
     flexDirection: 'row',
@@ -90,7 +75,8 @@ const styles = StyleSheet.create({
   },
   metaText: {
     fontSize: 11,
-    color: '#888',
+    color: '#333333',
     marginLeft: 3,
+    fontWeight: '500',
   },
 });

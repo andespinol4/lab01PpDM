@@ -2,19 +2,35 @@ import { Tabs } from 'expo-router';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const theme = (colorScheme === 'dark' ? 'dark' : 'light') as 'light' | 'dark';
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[theme].tint,
+        tabBarActiveTintColor: '#e63946',
+        tabBarInactiveTintColor: '#8a8a8a',
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: {
+          backgroundColor: '#0a0a0a',
+          borderTopWidth: 0,
+          height: 64,
+          paddingBottom: 10,
+          paddingTop: 8,
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+          textAlign: 'center',
+          alignSelf: 'center',
+          marginTop: 2,
+        },
+        tabBarItemStyle: {
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
       }}>
       <Tabs.Screen
         name="index"
