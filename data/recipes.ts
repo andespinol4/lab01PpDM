@@ -2,6 +2,7 @@ export interface Recipe {
   id: string;
   name: string;
   category: string;
+  tags: string[];
   image: string;
   prepTime: string;
   servings: number;
@@ -14,6 +15,7 @@ export const recipes: Recipe[] = [
     id: '1',
     name: 'Macarrão à Carbonara',
     category: 'Massas',
+    tags: ['Italiana', 'Massas', 'Almoço'],
     image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800',
     prepTime: '25 min',
     servings: 2,
@@ -38,6 +40,7 @@ export const recipes: Recipe[] = [
     id: '2',
     name: 'Salada Caesar',
     category: 'Saladas',
+    tags: ['Saudável', 'Light', 'Almoço'],
     image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=800',
     prepTime: '15 min',
     servings: 2,
@@ -60,6 +63,7 @@ export const recipes: Recipe[] = [
     id: '3',
     name: 'Risoto de Cogumelos',
     category: 'Massas',
+    tags: ['Italiana', 'Massas', 'Jantar'],
     image: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=800',
     prepTime: '40 min',
     servings: 4,
@@ -85,6 +89,7 @@ export const recipes: Recipe[] = [
     id: '4',
     name: 'Tacos Mexicanos',
     category: 'Lanches',
+    tags: ['Mexicana', 'Lanches', 'Jantar'],
     image: 'https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?w=800',
     prepTime: '30 min',
     servings: 3,
@@ -110,6 +115,7 @@ export const recipes: Recipe[] = [
     id: '5',
     name: 'Bolo de Chocolate',
     category: 'Sobremesas',
+    tags: ['Chocolate', 'Doce', 'Sobremesas'],
     image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=800',
     prepTime: '50 min',
     servings: 8,
@@ -135,6 +141,7 @@ export const recipes: Recipe[] = [
     id: '6',
     name: 'Sopa de Legumes',
     category: 'Sopas',
+    tags: ['Saudável', 'Quente', 'Conforto'],
     image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800',
     prepTime: '35 min',
     servings: 4,
@@ -157,4 +164,4 @@ export const recipes: Recipe[] = [
   },
 ];
 
-export const categories = ['Todos', 'Massas', 'Saladas', 'Lanches', 'Sobremesas', 'Sopas'];
+export const categories = ['Todos', 'Massas', 'Saladas', 'Lanches', 'Sobremesas', 'Sopas', 'Italiana', 'Saudável', 'Mexicana', 'Chocolate', 'Almoço', 'Jantar'];

@@ -1,14 +1,39 @@
-import { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Alert, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { ThemedText as Text } from '@/components/themed-text';
+import { getUser } from '@/services/recipe-storage';
 
 export default function LoginScreen() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+
+  const handleLogin = async () => {
+    const emailFormatado = email.trim().toLowerCase();
+    const senhaFormatada = senha.trim();
+
+    if (!emailFormatado || !senhaFormatada) {
+      Alert.alert('Atenção', 'Informe e-mail e senha para continuar.');
+      return;
+    }
+
+    const usuario = await getUser();
+
+    if (!usuario) {
+      Alert.alert('Conta não encontrada', 'Cadastre-se antes de entrar no app.');
+      return;
+    }
+
+    if (usuario.email.toLowerCase() !== emailFormatado || usuario.password !== senhaFormatada) {
+      Alert.alert('Credenciais inválidas', 'E-mail ou senha incorretos.');
+      return;
+    }
+
+    router.replace('/(tabs)');
+  };
 
   return (
     <View style={styles.container}>
@@ -41,7 +66,7 @@ export default function LoginScreen() {
           onChangeText={setSenha}
         />
 
-        <TouchableOpacity style={styles.loginButton}>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Entrar</Text>
         </TouchableOpacity>
       </View>

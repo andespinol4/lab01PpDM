@@ -1,11 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { SecaoDadosAcesso } from '@/components/cadastro/secao-dados-acesso';
 import { SecaoDadosPessoais } from '@/components/cadastro/secao-dados-pessoais';
 import { ThemedText as Text } from '@/components/themed-text';
+import { saveUser } from '@/services/recipe-storage';
 
 export default function CadastroScreen() {
   const router = useRouter();
@@ -18,10 +19,38 @@ export default function CadastroScreen() {
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
 
-  const handleCadastro = () => {
-    // Este laboratório não exige persistência real dos dados,
-    // apenas a construção da interface utilizando componentes.
-    router.push('/');
+  const handleCadastro = async () => {
+    const nome = nomeCompleto.trim();
+    const emailFormatado = email.trim().toLowerCase();
+    const senhaFormatada = senha.trim();
+    const confirmarSenhaFormatada = confirmarSenha.trim();
+
+    if (!nome || !emailFormatado || !telefone.trim() || !dataNascimento.trim() || !cpf.trim()) {
+      Alert.alert('Atenção', 'Preencha todos os dados pessoais antes de continuar.');
+      return;
+    }
+
+    if (senhaFormatada.length < 6) {
+      Alert.alert('Senha inválida', 'A senha deve ter pelo menos 6 caracteres.');
+      return;
+    }
+
+    if (senhaFormatada !== confirmarSenhaFormatada) {
+      Alert.alert('Senha inválida', 'As senhas precisam ser iguais.');
+      return;
+    }
+
+    await saveUser({
+      nomeCompleto: nome,
+      email: emailFormatado,
+      telefone: telefone.trim(),
+      dataNascimento: dataNascimento.trim(),
+      cpf: cpf.trim(),
+      password: senhaFormatada,
+    });
+
+    Alert.alert('Cadastro concluído', 'Sua conta foi criada com sucesso.');
+    router.replace('/login');
   };
 
   return (

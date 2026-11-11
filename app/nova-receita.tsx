@@ -12,6 +12,7 @@ export default function NovaReceitaScreen() {
 
   const [nome, setNome] = useState('');
   const [categoria, setCategoria] = useState('');
+  const [tags, setTags] = useState('');
   const [tempo, setTempo] = useState('');
   const [porcoes, setPorcoes] = useState('2');
   const [imagem, setImagem] = useState('https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800');
@@ -23,10 +24,16 @@ export default function NovaReceitaScreen() {
       return;
     }
 
+    const tagsList = tags
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean);
+
     const receita: Recipe = {
       id: `custom-${Date.now()}`,
       name: nome.trim(),
       category: categoria.trim(),
+      tags: tagsList.length > 0 ? [...new Set([categoria.trim(), ...tagsList])] : [categoria.trim()],
       image: imagem.trim() || 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800',
       prepTime: tempo.trim() || '20 min',
       servings: Number(porcoes) || 2,
@@ -59,6 +66,14 @@ export default function NovaReceitaScreen() {
 
         <Text style={styles.label}>Categoria</Text>
         <TextInput style={styles.input} value={categoria} onChangeText={setCategoria} placeholder="Ex.: Sobremesas" />
+
+        <Text style={styles.label}>Tags</Text>
+        <TextInput
+          style={styles.input}
+          value={tags}
+          onChangeText={setTags}
+          placeholder="Ex.: Italiana, doce, família"
+        />
 
         <Text style={styles.label}>Tempo de preparo</Text>
         <TextInput style={styles.input} value={tempo} onChangeText={setTempo} placeholder="Ex.: 40 min" />

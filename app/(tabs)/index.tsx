@@ -53,7 +53,10 @@ export default function HomeScreen() {
   const filteredRecipes = useMemo(() => {
     return allRecipes.filter((r) => {
       const matchesSearch = r.name.toLowerCase().includes(search.toLowerCase());
-      const matchesCategory = selectedCategory === 'Todos' || r.category === selectedCategory;
+      const matchesCategory =
+        selectedCategory === 'Todos' ||
+        r.category === selectedCategory ||
+        r.tags.includes(selectedCategory);
       return matchesSearch && matchesCategory;
     });
   }, [allRecipes, search, selectedCategory]);

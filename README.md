@@ -1,50 +1,59 @@
-# Welcome to your Expo app 👋
+# GastroAlquimia
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicativo mobile em React Native + Expo para explorar receitas, salvar favoritos e criar receitas próprias.
 
-## Get started
+## Objetivo do projeto
 
-1. Install dependencies
+O GastroAlquimia foi desenvolvido como solução para organizar receitas de forma prática, visual e persistente no dispositivo. O app permite:
 
+- visualizar um catálogo inicial de receitas;
+- buscar por nome e filtrar por categoria;
+- favoritar receitas;
+- criar e salvar receitas personalizadas;
+- manter a lista de favoritos após fechar o app.
+
+## Funcionalidades principais
+
+- tela de boas-vindas e navegação inicial;
+- autenticação local simples por cadastro e login;
+- listagem de receitas com busca e filtro;
+- detalhe completo da receita;
+- favoritos com persistência em AsyncStorage;
+- criação de receitas personalizadas;
+- uso de recursos nativos: localização e seleção de imagem.
+
+## Tecnologias
+
+- React Native
+- Expo
+- Expo Router
+- AsyncStorage
+- Expo Location
+- Expo Image Picker
+- Expo Image
+- React Native Toast Message
+
+## Como executar
+
+1. Instale as dependências:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+2. Inicie o app:
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+3. Escolha o emulador ou dispositivo conectado.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Observações da entrega
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Este projeto foi estruturado como app acadêmico para apresentação e entrega final, com foco em navegação, persistência local e recursos nativos.
 
-## Get a fresh project
+## Estrutura principal
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- `app/` — telas e rotas
+- `components/` — blocos reutilizáveis da interface
+- `services/` — persistência e regras locais
+- `data/` — catálogo base de receitas

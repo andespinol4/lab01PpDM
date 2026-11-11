@@ -1,28 +1,34 @@
-import { useCallback, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { useFocusEffect, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useMemo, useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 import { RecipeCard } from '@/components/recipe-cards';
 import { ThemedText as Text } from '@/components/themed-text';
-import { recipes } from '@/data/recipes';
-
-const FAVORITES_KEY = '@gastroalquimia_favorites';
+import { recipes, type Recipe } from '@/data/recipes';
+import { FAVORITES_KEY, getCustomRecipes, getFavoriteIds } from '@/services/recipe-storage';
 
 export default function FavoritosScreen() {
   const router = useRouter();
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [customRecipes, setCustomRecipes] = useState<Recipe[]>([]);
 
   const loadFavorites = useCallback(async () => {
-    const stored = await AsyncStorage.getItem(FAVORITES_KEY);
-    setFavorites(stored ? JSON.parse(stored) : []);
+    const favoritesIds = await getFavoriteIds();
+    setFavorites(favoritesIds);
+  }, []);
+
+  const loadCustomRecipes = useCallback(async () => {
+    const stored = await getCustomRecipes();
+    setCustomRecipes(stored);
   }, []);
 
   useFocusEffect(
     useCallback(() => {
       loadFavorites();
-    }, [loadFavorites])
+      loadCustomRecipes();
+    }, [loadFavorites, loadCustomRecipes])
   );
 
   const toggleFavorite = async (id: string, name: string) => {
@@ -38,7 +44,10 @@ export default function FavoritosScreen() {
     });
   };
 
-  const favoriteRecipes = recipes.filter((r) => favorites.includes(r.id));
+  const favoriteRecipes = useMemo(() => {
+    const availableRecipes = [...recipes, ...customRecipes];
+    return availableRecipes.filter((recipe) => favorites.includes(recipe.id));
+  }, [customRecipes, favorites]);
 
   return (
     <View style={styles.container}>
@@ -74,6 +83,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 60,
     paddingHorizontal: 16,
+    backgroundColor: '#000000',
   },
   title: {
     marginBottom: 16,
